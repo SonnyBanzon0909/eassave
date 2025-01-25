@@ -378,7 +378,7 @@ input[type="number"]::-webkit-outer-spin-button {
 <main class="main-wrapper">
 
   <!-- Navigation -->
-  <?php include 'partials/navigation.html'; ?>
+  <?php include 'partials/navigation-light.html'; ?>
 
   <section class="section-hero">
     <div data-delay="4000" data-animation="cross" class="slider w-slider" data-autoplay="true" data-easing="ease" data-hide-arrows="true" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="1000" data-infinite="true">
