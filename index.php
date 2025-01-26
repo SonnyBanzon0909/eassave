@@ -1,3 +1,22 @@
+<?php
+// Using absolute path to call the configuration file
+ 
+ 
+ 
+// Using absolute path to call the configuration file
+require_once '../private/config.php';  // Goes one folder above and accesses the 'private' folder
+
+// Example: Database connection
+$conn = new mysqli($db_host, $db_user, $db_password, $db_name);
+
+// Check the connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+?>
+
+
+
 <!DOCTYPE html><!--  Last Published: Fri Oct 11 2024 08:14:06 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="665f147b743ba95cae446d00" data-wf-site="665f147b743ba95cae446cfe">
 <head>

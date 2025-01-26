@@ -1,3 +1,27 @@
+<?php
+// Using absolute path to call the configuration file
+ 
+ 
+ 
+// Using absolute path to call the configuration file
+require_once '../../private/config.php';  // Goes one folder above and accesses the 'private' folder
+
+// Example: Database connection
+$conn = new mysqli($db_host, $db_user, $db_password, $db_name);
+
+// Check the connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+ 
+?>
+
+
+ 
+
+
+
+
 <!DOCTYPE html><!--  Last Published: Fri Oct 11 2024 08:14:06 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="665f147b743ba95cae446d52" data-wf-site="665f147b743ba95cae446cfe">
 <head>
@@ -17,8 +41,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
   <script type="text/javascript">WebFont.load({  google: {    families: ["Epilogue:300,regular,500,600,700,900","Inter:100,200,300,regular,500,600,700,800,900"]  }});</script>
   <script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script>
-  <link href="../images/favicon.png" rel="shortcut icon" type="image/x-icon">
-  <link href="../images/webclip.png" rel="apple-touch-icon">
+  <link href=".../../images/favicon.png" rel="shortcut icon" type="image/x-icon">
+  <link href=".../../images/webclip.png" rel="apple-touch-icon">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 </head>
 <body>
