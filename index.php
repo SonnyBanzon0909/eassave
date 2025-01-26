@@ -740,7 +740,7 @@ input[type="number"]::-webkit-outer-spin-button {
 </section>
 
 <!-- Footer section -->
-<?php include 'partials/footer.html'; ?>
+<?php include 'partials/footer-light.html'; ?>
 
 
 

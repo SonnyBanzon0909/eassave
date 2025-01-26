@@ -10,16 +10,19 @@
   <meta content="Login" property="og:title">
   <meta content="Login" property="twitter:title">
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <link href="../css/normalize.css" rel="stylesheet" type="text/css">
-  <link href="../css/webflow.css" rel="stylesheet" type="text/css">
-  <link href="../css/eassave-v2.webflow.css" rel="stylesheet" type="text/css">
+
+  <base href="../" /> <!--Use this to locate the right path -->
+
+  <link href=".../../css/normalize.css" rel="stylesheet" type="text/css">
+  <link href=".../../css/webflow.css" rel="stylesheet" type="text/css">
+  <link href=".../../css/eassave-v2.webflow.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
   <script type="text/javascript">WebFont.load({  google: {    families: ["Epilogue:300,regular,500,600,700,900","Inter:100,200,300,regular,500,600,700,800,900"]  }});</script>
   <script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script>
-  <link href="../images/favicon.png" rel="shortcut icon" type="image/x-icon">
-  <link href="../images/webclip.png" rel="apple-touch-icon">
+  <link href=".../../images/favicon.png" rel="shortcut icon" type="image/x-icon">
+  <link href=".../../images/webclip.png" rel="apple-touch-icon">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 </head>
 <body>
@@ -377,11 +380,11 @@ input[type="number"]::-webkit-outer-spin-button {
                   <div class="form-excerpt">Please login using the account details bellow.</div>
                   <div class="login-grid">
                     <div class="field-wrapper"><input class="text-field transparent-text-field w-input" maxlength="256" name="Email" data-name="Email" placeholder="Email" type="email" id="Email" required=""></div>
-                    <div class="field-wrapper icon-field-wrapper"><input class="text-field transparent-text-field w-input" maxlength="256" name="Password" data-name="Password" placeholder="Password" type="password" id="Password" required=""><img src="../images/eye-slash.svg" loading="lazy" alt="" class="field-icon"></div>
+                    <div class="field-wrapper icon-field-wrapper"><input class="text-field transparent-text-field w-input" maxlength="256" name="Password" data-name="Password" placeholder="Password" type="password" id="Password" required=""><img src=".../../images/eye-slash.svg" loading="lazy" alt="" class="field-icon"></div>
                     <div id="w-node-de69ede3-213b-09f7-1072-4a12ac329d2d-ae446d51" class="remember-wrapper"><label class="w-checkbox checkbox-field">
                         <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox"></div><input type="checkbox" id="checkbox-2" name="checkbox-2" data-name="Checkbox 2" style="opacity:0;position:absolute;z-index:-1"><span class="cart-check-label w-form-label" for="checkbox-2">Remember Me</span>
                       </label>
-                      <a href="../auth/forgot-password.php" class="purple-span">Forgot Password?</a>
+                      <a href=".../../auth/forgot-password.php" class="purple-span">Forgot Password?</a>
                     </div>
                     <a data-w-id="6781a2ad-69e0-0135-a3da-b0405a444638" href="#" class="button is-icon max-button-width w-inline-block">
                       <div class="btn-text">Login</div>
@@ -396,12 +399,12 @@ input[type="number"]::-webkit-outer-spin-button {
                       <div class="padd-12">OR SIGN IN WITH</div>
                       <div class="line"></div>
                     </div>
-                    <a href="#" class="button is-secondary icon-btn min-208 w-inline-block"><img src="../images/Google__G__Logo-1.svg" loading="lazy" alt="">
+                    <a href="#" class="button is-secondary icon-btn min-208 w-inline-block"><img src=".../../images/Google__G__Logo-1.svg" loading="lazy" alt="">
                       <div>Google</div>
                     </a>
                     <div class="register-wrapper">
                       <div class="dont-text">Don’t have an account yet?</div>
-                      <a href="../auth/register.html" class="underline-link">REGISTER NOW</a>
+                      <a href=".../../auth/register.php" class="underline-link">REGISTER NOW</a>
                     </div>
                   </div>
                 </form>
@@ -424,7 +427,7 @@ input[type="number"]::-webkit-outer-spin-button {
     </div>
   </div>
   <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=665f147b743ba95cae446cfe" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-  <script src="../js/webflow.js" type="text/javascript"></script>
+  <script src=".../../js/webflow.js" type="text/javascript"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
 // Get the current year
