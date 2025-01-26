@@ -366,7 +366,7 @@ input[type="number"]::-webkit-outer-spin-button {
   <!-- Navigation -->
   <?php include 'partials/navigation-light.html'; ?>
 
-
+<!-- sample -->
 
       <section class="section-shop">
         <div class="padding-global">
