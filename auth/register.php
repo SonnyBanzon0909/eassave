@@ -1,23 +1,90 @@
 <?php
-// Using absolute path to call the configuration file
- 
- 
- 
-// Using absolute path to call the configuration file
-require_once '../../private/config.php';  // Goes one folder above and accesses the 'private' folder
+require_once '../../private/config.php';  // Database configuration
 
-// Example: Database connection
+// // Display only necessary errors in development
+// ini_set('display_errors', 0);
+// ini_set('display_startup_errors', 0);
+// error_reporting(E_ALL);
+
+// // Ensure JSON output
+// header('Content-Type: application/json');
+
+// Establish database connection
 $conn = new mysqli($db_host, $db_user, $db_password, $db_name);
 
-// Check the connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    echo json_encode(["message" => "Database connection failed: " . $conn->connect_error]);
+    exit;
 }
- 
+
+function registerUser($email, $phone, $password, $confirmPassword) {
+    global $conn;
+
+    // Sanitize and validate inputs
+    $email = trim($email);
+    $phone = trim($phone);
+    $password = trim($password);
+    $confirmPassword = trim($confirmPassword);
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return "Invalid email format.";
+    }
+
+    if (!preg_match('/^\d{10,15}$/', $phone)) {
+        return "Invalid phone number. Use 10-15 digits.";
+    }
+
+    if ($password !== $confirmPassword) {
+        return "Passwords do not match.";
+    }
+
+    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+
+    // Check if email already exists
+    $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows > 0) {
+        $stmt->close();
+        return "Email is already registered.";
+    }
+    $stmt->close();
+
+    // Insert user into the database
+    $stmt = $conn->prepare("INSERT INTO users (email, phone, password_hash) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $email, $phone, $hashedPassword);
+
+    if ($stmt->execute()) {
+        $stmt->close();
+        return "Registration successful!";
+    } else {
+        $error = $stmt->error;
+        $stmt->close();
+        return "Error: " . $error;
+    }
+}
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $email = $_POST["email"] ?? '';
+    $phone = $_POST["phone"] ?? '';
+    $password = $_POST["password"] ?? '';
+    $confirmPassword = $_POST["confirm-password"] ?? '';
+
+    $message = registerUser($email, $phone, $password, $confirmPassword);
+    echo json_encode(["message" => $message]);
+    exit; // End the script to prevent further output
+}
 ?>
 
 
- 
+
+
+
+
+
 
 
 
@@ -60,8 +127,8 @@ body {
 /* Focus state style for keyboard navigation for the focusable elements */
 *[tabindex]:focus-visible,
 input[type="file"]:focus-visible {
-   outline: 0.125rem solid #4d65ff;
-   outline-offset: 0.125rem;
+ outline: 0.125rem solid #4d65ff;
+ outline-offset: 0.125rem;
 }
 /* Get rid of top margin on first element in any rich text element */
 .w-richtext > :not(div):first-child, .w-richtext > div:first-child > :first-child {
@@ -69,11 +136,11 @@ input[type="file"]:focus-visible {
 }
 /* Get rid of bottom margin on last element in any rich text element */
 .w-richtext>:last-child, .w-richtext ol li:last-child, .w-richtext ul li:last-child {
-    margin-bottom: 0 !important;
+  margin-bottom: 0 !important;
 }
 /* Prevent all click and hover interaction with an element */
 .pointer-events-off {
-    pointer-events: none;
+  pointer-events: none;
 }
 /* Enables all click and hover interaction with an element */
 .pointer-events-on {
@@ -81,14 +148,14 @@ input[type="file"]:focus-visible {
 }
 /* Create a class of .div-square which maintains a 1:1 dimension of a div */
 .div-square::after {
-    content: "";
-    display: block;
-    padding-bottom: 100%;
+  content: "";
+  display: block;
+  padding-bottom: 100%;
 }
 /* Make sure containers never lose their center alignment */
 .container-medium,.container-small, .container-large {
-    margin-right: auto !important;
-    margin-left: auto !important;
+  margin-right: auto !important;
+  margin-left: auto !important;
 }
 /* 
 Make the following elements inherit typography styles from the parent and not have hardcoded values. 
@@ -111,17 +178,17 @@ a,
 */
 /* Apply "..." after 3 lines of text */
 .text-style-3lines {
-    display: -webkit-box;
-    overflow: hidden;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 /* Apply "..." after 2 lines of text */
 .text-style-2lines {
-    display: -webkit-box;
-    overflow: hidden;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 /* Adds inline flex display */
 .display-inlineflex {
@@ -138,8 +205,8 @@ a,
   padding: 0rem !important;
 }
 .spacing-clean {
-    padding: 0rem !important;
-    margin: 0rem !important;
+  padding: 0rem !important;
+  margin: 0rem !important;
 }
 .margin-top {
   margin-right: 0rem !important;
@@ -199,28 +266,28 @@ a,
 }
 .why-list.owl-carousel .owl-stage-outer
 {
-    overflow: visible;
+  overflow: visible;
 }
 .why-list.owl-carousel .owl-stage
 {
-    padding-left: 0;
+  padding-left: 0;
 }
 .partners-list .owl-item img
 {
-    width: auto !important;
+  width: auto !important;
 }
 .partners-list.owl-carousel .owl-stage-outer, .testimonial-list.owl-carousel .owl-stage-outer, .about-gallery-list.owl-carousel .owl-stage-outer
 {
-    overflow: visible !important;
+  overflow: visible !important;
 }
 a
 {
-    color: #0A4DF6;
+  color: #0A4DF6;
 }
 .select, .select-field {
-    appearance: none; /* Removes default arrow icon in some browsers */
-    -webkit-appearance: none; /* Removes default arrow icon in Safari */
-    -moz-appearance: none; /* Removes default arrow icon in Firefox */
+  appearance: none; /* Removes default arrow icon in some browsers */
+  -webkit-appearance: none; /* Removes default arrow icon in Safari */
+  -moz-appearance: none; /* Removes default arrow icon in Firefox */
 }
 .w-slide [aria-hidden="true"] {
  height: 0px !important;
@@ -244,19 +311,19 @@ a
 }
 .sidenav-button:hover .icon
 {
-    color: white;
+  color: white;
 }
 .sidenav-button.w--current .icon
 {
-    color: white;
+  color: white;
 }
 .recent-list .owl-stage
 {
-    padding-left: 0 !important;
+  padding-left: 0 !important;
 }
 .label span
 {
-    color: #EB5757;
+  color: #EB5757;
 }   
 .active-swiper {
   /* Make sure the container has enough height and width */
@@ -269,49 +336,49 @@ a
 }
 .tabs span
 {
-    font-size: 12px;
-    color: #D0222D;
+  font-size: 12px;
+  color: #D0222D;
 }
 /*For File Upload*/
 .file-upload {
-    display: flex;
-    align-items: center;
-    min-height: 34px;
-    color: #fff;
+  display: flex;
+  align-items: center;
+  min-height: 34px;
+  color: #fff;
 }
 .file-upload.disabled
 {   
-    color: #828282;
+  color: #828282;
 }
 .file-upload input[type="file"] {
-    display: none; /* Hide the default file input */
+  display: none; /* Hide the default file input */
 }
 .file-upload label {
-    background-color: #5028FF;
-    padding: 8px 24px;
-    cursor: pointer;
-    border-radius: 50px;
-    margin: 0;
+  background-color: #5028FF;
+  padding: 8px 24px;
+  cursor: pointer;
+  border-radius: 50px;
+  margin: 0;
 }
 .file-upload.disabled label 
 {
-    background-color: #CACACA;
+  background-color: #CACACA;
 }
 .file-name {
-    margin: 0 8px;
-    font-size: 14px;
-    font-weight: 400;
-    color: #171717;
+  margin: 0 8px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #171717;
 }
 .remove-file {
-    cursor: pointer;
-    background-image: url('https://uploads-ssl.webflow.com/665f147b743ba95cae446cfe/66a51772340eb291308ac0da_close_24px.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 24px;
-    height: 24px;
-    display: none;
+  cursor: pointer;
+  background-image: url('https://uploads-ssl.webflow.com/665f147b743ba95cae446cfe/66a51772340eb291308ac0da_close_24px.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 24px;
+  height: 24px;
+  display: none;
 }
 .scolling-wrapper::-webkit-scrollbar {
   width: 0px;
@@ -329,7 +396,7 @@ a
 }
 .color-text-field
 {
-   border: solid 1px #BDBDBD;
+ border: solid 1px #BDBDBD;
 }
 .label-text
 {
@@ -341,47 +408,47 @@ a
   cursor: pointer;
 }
 .radio-button-field .layout-radio.w--redirected-checked ~ .radio-phone-template {
-    border: solid 3px #19A733;
+  border: solid 3px #19A733;
 }
 .radio-button-field .layout-radio.w--redirected-checked + .radio-phone-template {
-    border: solid 3px #19A733;
+  border: solid 3px #19A733;
 }
 .radio-button-field.w--redirected-checked .radio-phone-template {
-    border: solid 3px #19A733;
+  border: solid 3px #19A733;
 }
 @media screen and (max-width: 991px) {
-    .hide, .hide-tablet {
-        display: none !important;
-    }
+  .hide, .hide-tablet {
+    display: none !important;
+  }
 }
 @media screen and (max-width: 767px) {
-    .hide-mobile-landscape{
-      display: none !important;
+  .hide-mobile-landscape{
+    display: none !important;
   }
 }
 @media screen and (max-width: 479px) {
-    .hide-mobile{
-      display: none !important;
+  .hide-mobile{
+    display: none !important;
   }
   .label-text
   {
     min-width: 95px;
     font-size: 12px;
-}
-.color
-{
- margin: 0 4px !important;
-}
-.color-field
-{
- max-width: 55%;
-}
+  }
+  .color
+  {
+   margin: 0 4px !important;
+ }
+ .color-field
+ {
+   max-width: 55%;
+ }
 }
 /* Remove the spinner arrows for Chrome, Safari, Edge */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 </style>
 </div>
@@ -392,54 +459,77 @@ input[type="number"]::-webkit-outer-spin-button {
 
 
 <section id="contact-form" class="section-auth">
-    <div class="padding-global">
-      <div class="container-large">
-        <div class="auth-wrapper">
-          <div id="w-node-_6781a2ad-69e0-0135-a3da-b0405a444611-ae446d52" class="auth-form-block w-form">
-            <form id="wf-form-Login-Form" name="wf-form-Login-Form" data-name="Login Form" method="get" data-wf-page-id="665f147b743ba95cae446d52" data-wf-element-id="6781a2ad-69e0-0135-a3da-b0405a444612">
-              <h1 class="heading-style-h5 bot-33">Create an Account</h1>
-              <div class="login-grid">
-                <div class="field-wrapper"><input class="text-field transparent-text-field w-input" maxlength="256" name="Email" data-name="Email" placeholder="Email" type="email" id="Email" required=""></div>
-                <div class="field-wrapper"><input class="text-field transparent-text-field w-input" maxlength="256" name="Phone" data-name="Phone" placeholder="Phone" type="tel" id="Phone" required="">
-                  <div class="sub-label">We will send you One Time Code on your phone number</div>
-              </div>
-              <div class="field-wrapper icon-field-wrapper"><input class="text-field transparent-text-field w-input" maxlength="256" name="Password" data-name="Password" placeholder="Password" type="password" id="Password" required=""><img src=".../../images/eye-slash.svg" loading="lazy" alt="" class="field-icon"></div>
-              <div class="field-wrapper icon-field-wrapper"><input class="text-field transparent-text-field w-input" maxlength="256" name="Confirm-Password" data-name="Confirm Password" placeholder="Confirm Password" type="password" id="Confirm-Password" required=""><img src=".../../images/eye-slash.svg" loading="lazy" alt="" class="field-icon"></div>
-              <div id="w-node-de69ede3-213b-09f7-1072-4a12ac329d2d-ae446d52" class="remember-wrapper"><label class="w-checkbox checkbox-field">
-                <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox"></div><input type="checkbox" id="checkbox-2" name="checkbox-2" data-name="Checkbox 2" style="opacity:0;position:absolute;z-index:-1"><span class="cart-check-label w-form-label" for="checkbox-2">I understand and agree to the <a href="#" class="purple-span">Privacy Policy</a> and <a href="#" class="purple-span">Terms of Service</a></span>
-            </label></div>
-            <a data-w-id="6781a2ad-69e0-0135-a3da-b0405a444638" href="#" class="button is-icon max-button-width w-inline-block">
-              <div class="btn-text">Sign Up</div>
-              <div class="icon-1x1-small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewbox="0 0 12 12" fill="none">
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M5.32481 1.89973C5.86086 2.62911 7.23527 3.75138 9.13918 3.69086L1.16196 8.29651L1.44768 8.79138L9.42395 4.18628C8.42036 5.80457 8.70502 7.5554 9.06858 8.38414L9.59187 8.15458C9.19323 7.24586 8.893 4.99296 10.9407 3.33777L10.7588 3.11272L10.7351 3.07171L10.6311 2.80164C8.17386 3.74738 6.37291 2.36093 5.78526 1.56133L5.32481 1.89973Z" fill="white"></path>
-              </svg></div>
-              <div class="button-overlay pointer-events-off"></div><input type="submit" data-wait="" class="submit-btn w-button" value="">
-          </a>
-      </div>
-      <div class="google-wrapper">
+  <div class="padding-global">
+    <div class="container-large">
+      <div class="auth-wrapper">
+        <div id="w-node-_6781a2ad-69e0-0135-a3da-b0405a444611-ae446d52" class="auth-form-block w-form">
+
+
+           <form id="wf-form-Login-Form" name="wf-form-Login-Form" data-name="Login Form" method="post" action="auth/register.php" data-wf-page-id="665f147b743ba95cae446d52" data-wf-element-id="6781a2ad-69e0-0135-a3da-b0405a444612">
+
+    <h1 class="heading-style-h5 bot-33">Create an Account</h1>
+    <div class="login-grid">
+        <div class="field-wrapper">
+            <input class="text-field transparent-text-field w-input" maxlength="256" name="email" id="Email" placeholder="Email" type="email" required>
+        </div>
+        <div class="field-wrapper">
+            <input class="text-field transparent-text-field w-input" maxlength="256" name="phone" id="Phone" placeholder="Phone" type="tel" required>
+            <div class="sub-label">We will send you a One Time Code on your phone number</div>
+        </div>
+        <div class="field-wrapper icon-field-wrapper">
+            <input class="text-field transparent-text-field w-input" maxlength="256" name="password" id="Password" placeholder="Password" type="password" required>
+            <img src=".../../images/eye-slash.svg" loading="lazy" alt="" class="field-icon">
+        </div>
+        <div class="field-wrapper icon-field-wrapper">
+            <input class="text-field transparent-text-field w-input" maxlength="256" name="confirm-password" id="Confirm-Password" placeholder="Confirm Password" type="password" required>
+            <img src=".../../images/eye-slash.svg" loading="lazy" alt="" class="field-icon">
+        </div>
+        <div class="remember-wrapper">
+            <label class="w-checkbox checkbox-field">
+                <input type="checkbox" id="terms" name="terms" required>
+                <span class="cart-check-label w-form-label">I understand and agree to the 
+                    <a href="#" class="purple-span">Privacy Policy</a> and 
+                    <a href="#" class="purple-span">Terms of Service</a>
+                </span>
+            </label>
+        </div>
+        <button type="submit" class="button is-icon max-button-width w-inline-block">
+            <div class="btn-text">Sign Up</div>
+            <div class="icon-1x1-small w-embed">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M5.32481 1.89973C5.86086 2.62911 7.23527 3.75138 9.13918 3.69086L1.16196 8.29651L1.44768 8.79138L9.42395 4.18628C8.42036 5.80457 8.70502 7.5554 9.06858 8.38414L9.59187 8.15458C9.19323 7.24586 8.893 4.99296 10.9407 3.33777L10.7588 3.11272L10.7351 3.07171L10.6311 2.80164C8.17386 3.74738 6.37291 2.36093 5.78526 1.56133L5.32481 1.89973Z" fill="white"></path>
+                </svg>
+            </div>
+        </button>
+    </div>
+    <div id="message" class="form-message"></div> <!-- Placeholder for success/error messages -->
+    <div class="google-wrapper">
         <div class="sign-with-wrapper">
-          <div class="padd-12">OR SIGN IN WITH</div>
-          <div class="line"></div>
-      </div>
-      <a href="#" class="button is-secondary icon-btn min-208 w-inline-block"><img src=".../../images/Google__G__Logo-1.svg" loading="lazy" alt="">
-          <div>Google</div>
-      </a>
-      <div class="register-wrapper">
-          <div class="dont-text">Already have an account ?</div>
-          <a href="../auth/login.html" class="underline-link">LOGIN NOW</a>
-      </div>
-  </div>
+            <div class="padd-12">OR SIGN IN WITH</div>
+            <div class="line"></div>
+        </div>
+        <a href="#" class="button is-secondary icon-btn min-208 w-inline-block">
+            <img src=".../../images/Google__G__Logo-1.svg" loading="lazy" alt="">
+            <div>Google</div>
+        </a>
+        <div class="register-wrapper">
+            <div class="dont-text">Already have an account?</div>
+            <a href="../auth/login.html" class="underline-link">LOGIN NOW</a>
+        </div>
+    </div>
 </form>
-<div class="w-form-done">
-  <div>Thank you! Your submission has been received!</div>
-</div>
-<div class="w-form-fail">
-  <div>Oops! Something went wrong while submitting the form.</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+
+
+          <div class="w-form-done">
+            <div>Thank you! Your submission has been received!</div>
+          </div>
+          <div class="w-form-fail">
+            <div>Oops! Something went wrong while submitting the form.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 
@@ -453,11 +543,38 @@ input[type="number"]::-webkit-outer-spin-button {
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
 // Get the current year
-    var currentYear = new Date().getFullYear();
+  var currentYear = new Date().getFullYear();
 // Get the current year when the page loads
-    $(document).ready(function() {
-      $("#footer-note").text("Copyright © "+ currentYear +" Eassave. All Rights Reserved.");
+  $(document).ready(function() {
+    $("#footer-note").text("Copyright © "+ currentYear +" Eassave. All Rights Reserved.");
   });
 </script>
+
+
+<script>
+  document.getElementById("wf-form-Login-Form").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+
+    const response = await fetch("auth/register.php", {
+      method: "POST",
+      body: formData
+    });
+
+    const result = await response.json();
+    const messageDiv = document.getElementById("message");
+    
+    messageDiv.innerText = result.message;
+    messageDiv.style.color = result.status === "success" ? "green" : "red";
+    
+    if (result.status === "success") {
+      this.reset();
+    }
+  });
+</script>
+
+
+
 </body>
 </html>
