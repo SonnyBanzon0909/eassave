@@ -54,7 +54,7 @@ if (empty($_SESSION['csrf_token'])) {
           <div class="container-large">
             <div class="auth-wrapper">
               <div id="w-node-_6781a2ad-69e0-0135-a3da-b0405a444611-ae446d51" class="auth-form-block w-form">
-                <form id="wf-form-Login-Form" name="wf-form-Login-Form" data-name="Login Form" action="../../private/auth/login-code.php" method="post" data-wf-page-id="665f147b743ba95cae446d51" data-wf-element-id="6781a2ad-69e0-0135-a3da-b0405a444612">
+                <form id="wf-form-Login-Form" name="wf-form-Login-Form" data-name="Login Form" action="../../private/auth/login-code.php" method="POST" data-wf-page-id="665f147b743ba95cae446d51" data-wf-element-id="6781a2ad-69e0-0135-a3da-b0405a444612">
                   <h1 class="heading-style-h5">Welcome Back 👋</h1>
                   <div class="form-excerpt">Please login using the account details bellow.</div>
                   <div class="login-grid">
@@ -82,13 +82,16 @@ if (empty($_SESSION['csrf_token'])) {
                     </label>
                     <a href=".../../auth/forgot-password.php" class="purple-span">Forgot Password?</a>
                   </div>
-                  <a data-w-id="6781a2ad-69e0-0135-a3da-b0405a444638" href="#" class="button is-icon max-button-width w-inline-block">
+                  
+                  <button data-w-id="6781a2ad-69e0-0135-a3da-b0405a444638" href="#" class="button is-icon max-button-width w-inline-block">
                     <div class="btn-text">Login</div>
                     <div class="icon-1x1-small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewbox="0 0 12 12" fill="none">
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M5.32481 1.89973C5.86086 2.62911 7.23527 3.75138 9.13918 3.69086L1.16196 8.29651L1.44768 8.79138L9.42395 4.18628C8.42036 5.80457 8.70502 7.5554 9.06858 8.38414L9.59187 8.15458C9.19323 7.24586 8.893 4.99296 10.9407 3.33777L10.7588 3.11272L10.7351 3.07171L10.6311 2.80164C8.17386 3.74738 6.37291 2.36093 5.78526 1.56133L5.32481 1.89973Z" fill="white"></path>
                     </svg></div>
                     <div class="button-overlay pointer-events-off"></div><input type="submit" data-wait="" class="submit-btn w-button" value="">
-                  </a>
+                  </button>
+
+
                 </div>
                 <div class="google-wrapper">
                   <div class="sign-with-wrapper">
@@ -142,30 +145,31 @@ if (empty($_SESSION['csrf_token'])) {
 
 
 
-  document.getElementById("wf-form-Login-Form").addEventListener("submit", async function(e) {
-    e.preventDefault();
-    alert("sample");
-    const formData = new FormData(this);
+ document.getElementById("wf-form-Login-Form").addEventListener("submit", async function(e) {
+  e.preventDefault();
 
-    const response = await fetch("../../private/auth/login-code.php", {
-      method: "POST",
-      body: formData
-    });
+  // Create a FormData object to gather the form data
+  const formData = new FormData(this);
 
-
-
-  // Control visibility based on result status
-    if (result.message === "success") {
-
-     // Redirect to login.php after success
-      window.location.href = ".../../auth/otp.php";
-
-      alert("result.message");
-      this.reset();
-    } else {
-      alert(result.message);
-    }
+  // Make the fetch request
+  const response = await fetch("../../private/auth/login-code.php", {
+    method: "POST",  // Make sure it's POST, not GET
+    body: formData
   });
+
+  // Wait for the response to be parsed as JSON
+  const result = await response.json();
+
+  // Check for success
+  if (result.message === "success") {
+    // Redirect to OTP page on successful login
+    window.location.href = "../eassave";
+  } else {
+    // Show any error message
+    alert(result.message);
+  }
+});
+
 
 
 
@@ -191,7 +195,7 @@ if (empty($_SESSION['csrf_token'])) {
     toggleVisibility(passwordField, togglePassword);
   });
 
- 
+
 
 
 </script>
