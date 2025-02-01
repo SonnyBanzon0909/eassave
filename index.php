@@ -1,7 +1,6 @@
 <?php
-// Using absolute path to call the configuration file
- 
- 
+ // Start the session
+session_start();
  
 // Using absolute path to call the configuration file
 require_once '../private/config.php';  // Goes one folder above and accesses the 'private' folder
@@ -13,7 +12,15 @@ $conn = new mysqli($db_host, $db_user, $db_password, $db_name);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+ 
+
+// Check if user is remembered
+ include '../private/login-session.php';  
+
+
+
 ?>
+
 
 
 

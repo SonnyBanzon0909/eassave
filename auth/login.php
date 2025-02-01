@@ -7,6 +7,12 @@ session_start();
 if (empty($_SESSION['csrf_token'])) {
   $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
+
+// Check if user is remembered
+ include '../../private/login-session.php';  
+
+ 
+
 ?>
 
 
@@ -78,7 +84,7 @@ if (empty($_SESSION['csrf_token'])) {
 
 
                     <div id="w-node-de69ede3-213b-09f7-1072-4a12ac329d2d-ae446d51" class="remember-wrapper"><label class="w-checkbox checkbox-field">
-                      <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox"></div><input type="checkbox" id="checkbox-1" name="checkbox-2" data-name="Checkbox 2" style="opacity:0;position:absolute;z-index:-1"><span class="cart-check-label w-form-label" for="checkbox-2">Remember Me</span>
+                      <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox"></div><input type="checkbox" id="checkbox-1" name="remember_me" data-name="Checkbox 2" style="opacity:0;position:absolute;z-index:-1"><span class="cart-check-label w-form-label" for="checkbox-2">Remember Me</span>
                     </label>
                     <a href=".../../auth/forgot-password.php" class="purple-span">Forgot Password?</a>
                   </div>
