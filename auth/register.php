@@ -486,7 +486,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
             <div class="remember-wrapper">
               <label class="w-checkbox checkbox-field" style="padding: 0px">
-                <input type="checkbox" id="terms" name="terms" required>
+                <input type="checkbox" id="terms" name="terms" value="accepted" required>
                 <span class="cart-check-label w-form-label">I understand and agree to the 
                   <a href=".../../privacy-policy.php" class="purple-span">Privacy Policy</a> and 
                   <a href=".../../terms-and-conditions.php" class="purple-span">Terms of Service</a>
