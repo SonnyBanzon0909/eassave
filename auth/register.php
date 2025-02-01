@@ -429,6 +429,7 @@ input[type="number"]::-webkit-outer-spin-button {
   align-content: center;
   justify-content: center;
   align-items: center;
+  padding: 40px 20px;
 }
 .otp-auth-wrapper
 {
@@ -451,8 +452,8 @@ input[type="number"]::-webkit-outer-spin-button {
 
   <div id="w-node-_6781a2ad-69e0-0135-a3da-b0405a444611-e3a519d0" class="auth-form-block w-form otp-auth-wrapper">
     <form id="otp-form" name="otp-form" data-name="Login Form" method="get" data-wf-page-id="66c1d4d1c4e6e89fe3a519d0" data-wf-element-id="6781a2ad-69e0-0135-a3da-b0405a444612">
-      <h1 class="heading-style-h5">Verify Phone Number 📱</h1>
-      <div class="form-excerpt">You will get a OTP via SMS</div>
+      <h1 class="heading-style-h5">Verify Email Address 📱</h1>
+      <div class="form-excerpt">You will get a OTP via Email</div>
       <div class="login-grid bot-none">
         <div class="otp-wrapper"><input class="text-field transparent-text-field otp-field w-input" oninput="moveFocus(this, 'otp2')" maxlength="1" name="otp-1" data-name="otp-1" placeholder="0" type="number" id="otp1" required=""><input class="text-field transparent-text-field otp-field w-input" oninput="moveFocus(this, 'otp3')" maxlength="1" name="otp2" data-name="otp-2" placeholder="0" type="number" id="otp2" required=""><input class="text-field transparent-text-field otp-field w-input" oninput="moveFocus(this, 'otp4')" maxlength="1" name="otp-3" data-name="otp-3" placeholder="0" type="number" id="otp3" required=""><input class="text-field transparent-text-field otp-field w-input" oninput="moveFocus(this, 'otp5')" maxlength="1" name="otp-4" data-name="otp-4" placeholder="0" type="number" id="otp4" required=""><input class="text-field transparent-text-field otp-field w-input" oninput="moveFocus(this, 'otp6')" maxlength="1" name="otp-5" data-name="otp-5" placeholder="0" type="number" id="otp5" required=""><input class="text-field transparent-text-field otp-field w-input" maxlength="1" name="otp-6" data-name="otp-6" placeholder="0" type="number" id="otp6" required=""></div>
         <a data-w-id="6781a2ad-69e0-0135-a3da-b0405a444638" href="#" class="button is-icon max-button-width w-inline-block">
