@@ -1,32 +1,27 @@
 <?php
- 
+
 // Example: Database connection
 require_once '../../private/config.php';  // Database configuration
-
-// // Display only necessary errors in development
-// ini_set('display_errors', 0);
-// ini_set('display_startup_errors', 0);
-// error_reporting(E_ALL);
-
-// // Ensure JSON output
-// header('Content-Type: application/json');
 
 // Establish database connection
 $conn = new mysqli($db_host, $db_user, $db_password, $db_name);
 
 // Check the connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-    echo json_encode(["message" => "Database connection failed: " . $conn->connect_error]);
-    exit;
+    die(json_encode(["message" => "Database connection failed."]));
+}
+
+// Function to validate strong passwords
+function isStrongPassword($password) {
+    return preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&._])[A-Za-z\d@$!%*?&._]{8,}$/', $password);
 }
 
 function registerUser($email, $phone, $password, $confirmPassword) {
     global $conn;
 
     // Sanitize and validate inputs
-    $email = trim($email);
-    $phone = trim($phone);
+    $email = trim(filter_var($email, FILTER_SANITIZE_EMAIL));
+    $phone = trim(filter_var($phone, FILTER_SANITIZE_NUMBER_INT));
     $password = trim($password);
     $confirmPassword = trim($confirmPassword);
 
@@ -40,6 +35,10 @@ function registerUser($email, $phone, $password, $confirmPassword) {
 
     if ($password !== $confirmPassword) {
         return "Passwords do not match.";
+    }
+
+    if (!isStrongPassword($password)) {
+        return "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.";
     }
 
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
@@ -81,8 +80,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     echo json_encode(["message" => $message]);
     exit; // End the script to prevent further output
 }
- 
+
 ?>
+
 
 
 
