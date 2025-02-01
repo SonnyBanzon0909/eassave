@@ -380,6 +380,43 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.field-wrapper
+{
+  position: relative;
+}
+.toggle-icon
+{
+  height: 21px;
+  z-index: 2;
+  cursor: pointer;
+}
+.error-text-message {
+  display: none;
+  color: red;
+  padding: 5px 0;
+  font-size: 12px;
+  font-weight: 400px;
+  text-align: left;
+  position: absolute;
+  top: -25px;
+  left: 0px;
+  z-index: 0;
+}
+
+
+.error-text-message.password-req-message {
+
+  position: static;
+/*  //margin-top: -20px;*/
+
+}
+
+.error-border
+{
+  border: solid 1px red;
+}
+
 </style>
 </div>
 
@@ -407,20 +444,45 @@ input[type="number"]::-webkit-outer-spin-button {
 
 
             <div class="field-wrapper">
-              <input class="text-field transparent-text-field w-input" maxlength="256" name="email" id="Email" placeholder="Email" type="email" required>
+              <input class="text-field transparent-text-field w-input email-field" maxlength="256" name="email" id="Email" placeholder="Email" type="email" required>
+
+              <!-- Placeholder for success/error messages -->
+              <div id="email-message" class="error-text-message">Email is already registered.</div> 
+
             </div>
             <div class="field-wrapper">
-              <input class="text-field transparent-text-field w-input" maxlength="256" name="phone" id="Phone" placeholder="Phone" type="tel" required>
+              <input class="text-field transparent-text-field w-input phone-field" maxlength="256" name="phone" id="Phone" placeholder="Phone" type="tel" required>
+
+
+
+              <!-- Placeholder for success/error messages -->
+              <div id="phone-message" class="error-text-message">Invalid phone number. Use 10-15 digits.</div> 
+
+
+
               <div class="sub-label">We will send you a One Time Code on your phone number</div>
             </div>
             <div class="field-wrapper icon-field-wrapper">
-              <input class="text-field transparent-text-field w-input" maxlength="256" name="password" id="Password" placeholder="Password" type="password" required>
-              <img src=".../../images/eye-slash.svg" loading="lazy" alt="Toggle Password Visibility" class="field-icon" id="togglePassword">
+              <input class="text-field transparent-text-field w-input password-field" maxlength="256" name="password" id="Password" placeholder="Password" type="password" required>
+
+              <!-- Placeholder for success/error messages -->
+              <div id="password-message" class="error-text-message">Passwords do not match.</div> 
+
+
+              <img src=".../../images/eye-slash.svg" loading="lazy" alt="Toggle Password Visibility" class="field-icon toggle-icon" id="togglePassword">
             </div>
-            <div class="field-wrapper icon-field-wrapper">
-              <input class="text-field transparent-text-field w-input" maxlength="256" name="confirm-password" id="Confirm-Password" placeholder="Confirm Password" type="password" required>
-              <img src=".../../images/eye-slash.svg" loading="lazy" alt="Toggle Password Visibility" class="field-icon" id="toggleConfirmPassword">
+
+            <div>
+              <div class="field-wrapper icon-field-wrapper">
+                <input class="text-field transparent-text-field w-input password-field" maxlength="256" name="confirm-password" id="Confirm-Password" placeholder="Confirm Password" type="password" required>            
+                <img src=".../../images/eye-slash.svg" loading="lazy" alt="Toggle Password Visibility" class="field-icon toggle-icon" id="toggleConfirmPassword">
+              </div>
+
+
+              <!-- Placeholder for success/error messages -->
+              <div id="password-req-message" class="error-text-message password-req-message">Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.</div> 
             </div>
+
 
             <div class="remember-wrapper">
               <label class="w-checkbox checkbox-field" style="padding: 0px">
@@ -442,7 +504,7 @@ input[type="number"]::-webkit-outer-spin-button {
           </div>
 
 
-          <div id="message" class="form-message"></div> <!-- Placeholder for success/error messages -->
+          
 
 
           <div class="google-wrapper">
@@ -496,7 +558,7 @@ input[type="number"]::-webkit-outer-spin-button {
 <script>
   document.getElementById("wf-form-Login-Form").addEventListener("submit", async function(e) {
     e.preventDefault();
-    
+
     const formData = new FormData(this);
 
     const response = await fetch("../../private/auth/register-code.php", {
@@ -505,16 +567,83 @@ input[type="number"]::-webkit-outer-spin-button {
     });
 
     const result = await response.json();
-    const messageDiv = document.getElementById("message");
-    console.log(result); // Add this line to check what value is being returned
+    const email_messageDiv = document.getElementById("email-message");
+    const phone_messageDiv = document.getElementById("phone-message");
+    const pass_messageDiv = document.getElementById("password-message");
+    const req_messageDiv = document.getElementById("password-req-message");
 
-    messageDiv.innerText = result.message;
-    messageDiv.style.color = result.message === "success" ? "green" : "red";
-    
-    if (result.status === "success") {
-      this.reset();
+   
+
+  // Hide all message divs first
+  email_messageDiv.style.display = "none";
+  phone_messageDiv.style.display = "none";
+  pass_messageDiv.style.display = "none";
+  req_messageDiv.style.display = "none";
+
+  // Control visibility based on result status
+  if (result.message === "success") {
+     
+     // Redirect to login.php after success
+    window.location.href = ".../../auth/login.php";
+    this.reset();
+  } else {
+    // Show specific messages
+    switch (result.message) {
+    case "invalid-email":
+      email_messageDiv.style.display = "block";
+      email_messageDiv.innerText = "Invalid email format.";
+      
+      $(".error-border").each(function(){
+        $(this).removeClass("error-border");
+      });
+      $(".email-field").addClass("error-border");
+      break;
+
+    case "email-error":
+      email_messageDiv.style.display = "block";
+      email_messageDiv.innerText = "Email is already registered.";
+
+      $(".error-border").each(function(){
+        $(this).removeClass("error-border");
+      });
+
+      $(".email-field").addClass("error-border");
+      break;
+
+    case "phone-error":
+      phone_messageDiv.style.display = "block";
+
+      $(".error-border").each(function(){
+        $(this).removeClass("error-border");
+      });
+
+      $(".phone-field").addClass("error-border");
+      break;
+    case "password-match":
+      pass_messageDiv.style.display = "block";
+
+      $(".error-border").each(function(){
+        $(this).removeClass("error-border");
+      });
+      $(".password-field").addClass("error-border");
+      break;
+    case "password-req":
+      req_messageDiv.style.display = "block";
+
+      $(".error-border").each(function(){
+        $(this).removeClass("error-border");
+      });
+
+      $(".password-field").addClass("error-border");
+      break;
+    default:
+        // Handle any other messages
+      console.error("Unexpected error");
     }
-  });
+  }
+});
+
+
 
   // Get the password fields and their corresponding toggle icons
   const togglePassword = document.getElementById('togglePassword');
