@@ -426,8 +426,8 @@ input[type="number"]::-webkit-outer-spin-button {
               <label class="w-checkbox checkbox-field" style="padding: 0px">
                 <input type="checkbox" id="terms" name="terms" required>
                 <span class="cart-check-label w-form-label">I understand and agree to the 
-                  <a href="#" class="purple-span">Privacy Policy</a> and 
-                  <a href="#" class="purple-span">Terms of Service</a>
+                  <a href=".../../privacy-policy.php" class="purple-span">Privacy Policy</a> and 
+                  <a href=".../../terms-and-conditions.php" class="purple-span">Terms of Service</a>
                 </span>
               </label>
             </div>
@@ -440,7 +440,11 @@ input[type="number"]::-webkit-outer-spin-button {
               </div>
             </button>
           </div>
+
+
           <div id="message" class="form-message"></div> <!-- Placeholder for success/error messages -->
+
+
           <div class="google-wrapper">
             <div class="sign-with-wrapper">
               <div class="padd-12">OR SIGN IN WITH</div>
@@ -452,7 +456,7 @@ input[type="number"]::-webkit-outer-spin-button {
             </a>
             <div class="register-wrapper">
               <div class="dont-text">Already have an account?</div>
-              <a href="../auth/login.html" class="underline-link">LOGIN NOW</a>
+              <a href=".../../auth/login.php" class="underline-link">LOGIN NOW</a>
             </div>
           </div>
         </form>
@@ -502,9 +506,10 @@ input[type="number"]::-webkit-outer-spin-button {
 
     const result = await response.json();
     const messageDiv = document.getElementById("message");
-    
+    console.log(result); // Add this line to check what value is being returned
+
     messageDiv.innerText = result.message;
-    messageDiv.style.color = result.status === "success" ? "green" : "red";
+    messageDiv.style.color = result.message === "success" ? "green" : "red";
     
     if (result.status === "success") {
       this.reset();
