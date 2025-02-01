@@ -1,7 +1,7 @@
 
 <?php
 // Start the session
-session_start();
+// session_start();
 
 // Generate a CSRF token if it doesn't exist
 if (empty($_SESSION['csrf_token'])) {
@@ -9,9 +9,10 @@ if (empty($_SESSION['csrf_token'])) {
 }
 
 // Check if user is remembered
- include '../../private/login-session.php';  
+include '../../private/login-session.php';  
 
- 
+echo $_SESSION["is_login"];
+
 
 ?>
 
@@ -45,7 +46,16 @@ if (empty($_SESSION['csrf_token'])) {
     <div class="main-wrapper bg-gradient-black">
       <div class="global-styles w-embed">
 
-
+        <style> 
+          .login-btn-link
+          {
+            display: flex !important;
+          }
+          .login-wrapper
+          {
+            display: none; !important;
+          }
+        </style>
         <!-- Global CSS -->
         <?php include '../partials/global-css.css'; ?>
 
@@ -181,25 +191,25 @@ if (empty($_SESSION['csrf_token'])) {
 
 
 // Get the password fields and their corresponding toggle icons
-  const togglePassword = document.getElementById('togglePassword');
-  const passwordField = document.getElementById('Password');
-  const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
-  const confirmPasswordField = document.getElementById('Confirm-Password');
+ const togglePassword = document.getElementById('togglePassword');
+ const passwordField = document.getElementById('Password');
+ const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+ const confirmPasswordField = document.getElementById('Confirm-Password');
 
 // Function to toggle password visibility
-  function toggleVisibility(inputField, toggleIcon) {
-    const type = inputField.type === 'password' ? 'text' : 'password';
-    inputField.type = type;
+ function toggleVisibility(inputField, toggleIcon) {
+  const type = inputField.type === 'password' ? 'text' : 'password';
+  inputField.type = type;
 
   // Toggle the icon based on visibility
-    const icon = type === 'password' ? 'eye-slash.svg' : 'eye.svg';
-    toggleIcon.src = `.../../images/${icon}`;
-  }
+  const icon = type === 'password' ? 'eye-slash.svg' : 'eye.svg';
+  toggleIcon.src = `.../../images/${icon}`;
+}
 
 // Add event listeners to toggle icons
-  togglePassword.addEventListener('click', function () {
-    toggleVisibility(passwordField, togglePassword);
-  });
+togglePassword.addEventListener('click', function () {
+  toggleVisibility(passwordField, togglePassword);
+});
 
 
 

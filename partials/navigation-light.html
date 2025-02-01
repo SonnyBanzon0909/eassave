@@ -23,8 +23,8 @@
           <div id="activation-wrapper" class="nav-links-wraper _2-cols">
             <a id="w-node-_0ce80fb3-12ea-ae45-b05b-d15d1779e955-1779e93a" href="auth/activate-card.php" class="text-size-regular activate-btn">Activate Card</a>
 
-            <?php if (!$is_login) : ?>
-            <a data-w-id="0ce80fb3-12ea-ae45-b05b-d15d1779e957" href="auth/login.php" class="button is-icon w-inline-block">
+            <?php if (!$_SESSION['is_login']) : ?>
+            <a data-w-id="0ce80fb3-12ea-ae45-b05b-d15d1779e957" href="auth/login.php" class="button is-icon w-inline-block login-btn-link">
               <div class="btn-text">Login</div>
               <div class="icon-1x1-small w-embed">
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewbox="0 0 12 12" fill="none">
@@ -38,7 +38,7 @@
           </div>
 
 
-          <?php if ($is_login) : ?>
+          <?php if ($_SESSION['is_login']) : ?>
 
           <div id="login-button" class="login-wrapper">
             <div class="cart-wrapper">
