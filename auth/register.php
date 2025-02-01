@@ -1,87 +1,4 @@
-<?php
 
-// Example: Database connection
-require_once '../../private/config.php';  // Database configuration
-
-// Establish database connection
-$conn = new mysqli($db_host, $db_user, $db_password, $db_name);
-
-// Check the connection
-if ($conn->connect_error) {
-    die(json_encode(["message" => "Database connection failed."]));
-}
-
-// Function to validate strong passwords
-function isStrongPassword($password) {
-    return preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&._])[A-Za-z\d@$!%*?&._]{8,}$/', $password);
-}
-
-function registerUser($email, $phone, $password, $confirmPassword) {
-    global $conn;
-
-    // Sanitize and validate inputs
-    $email = trim(filter_var($email, FILTER_SANITIZE_EMAIL));
-    $phone = trim(filter_var($phone, FILTER_SANITIZE_NUMBER_INT));
-    $password = trim($password);
-    $confirmPassword = trim($confirmPassword);
-
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        return "Invalid email format.";
-    }
-
-    if (!preg_match('/^\d{10,15}$/', $phone)) {
-        return "Invalid phone number. Use 10-15 digits.";
-    }
-
-    if ($password !== $confirmPassword) {
-        return "Passwords do not match.";
-    }
-
-    if (!isStrongPassword($password)) {
-        return "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.";
-    }
-
-    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-
-    // Check if email already exists
-    $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->store_result();
-
-    if ($stmt->num_rows > 0) {
-        $stmt->close();
-        return "Email is already registered.";
-    }
-    $stmt->close();
-
-    // Insert user into the database
-    $stmt = $conn->prepare("INSERT INTO users (email, phone, password_hash) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $email, $phone, $hashedPassword);
-
-    if ($stmt->execute()) {
-        $stmt->close();
-        return "Registration successful!";
-    } else {
-        $error = $stmt->error;
-        $stmt->close();
-        return "Error: " . $error;
-    }
-}
-
-// Handle form submission
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $email = $_POST["email"] ?? '';
-    $phone = $_POST["phone"] ?? '';
-    $password = $_POST["password"] ?? '';
-    $confirmPassword = $_POST["confirm-password"] ?? '';
-
-    $message = registerUser($email, $phone, $password, $confirmPassword);
-    echo json_encode(["message" => $message]);
-    exit; // End the script to prevent further output
-}
-
-?>
 
 
 
@@ -470,11 +387,14 @@ input[type="number"]::-webkit-outer-spin-button {
         <div id="w-node-_6781a2ad-69e0-0135-a3da-b0405a444611-ae446d52" class="auth-form-block w-form">
 
 
-         <form id="wf-form-Login-Form" name="wf-form-Login-Form" data-name="Login Form" method="post" action="auth/register.php" data-wf-page-id="665f147b743ba95cae446d52" data-wf-element-id="6781a2ad-69e0-0135-a3da-b0405a444612">
+         <form id="wf-form-Login-Form" name="wf-form-Login-Form" data-name="Login Form" method="post" action="../../private/auth/register-code.php" data-wf-page-id="665f147b743ba95cae446d52" data-wf-element-id="6781a2ad-69e0-0135-a3da-b0405a444612">
 
           <h1 class="heading-style-h5 bot-33">Create an Account</h1>
           <div class="login-grid">
             <div class="field-wrapper">
+
+              <input type="" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+
               <input class="text-field transparent-text-field w-input" maxlength="256" name="email" id="Email" placeholder="Email" type="email" required>
             </div>
             <div class="field-wrapper">
@@ -563,7 +483,7 @@ input[type="number"]::-webkit-outer-spin-button {
     
     const formData = new FormData(this);
 
-    const response = await fetch("auth/register.php", {
+    const response = await fetch("../../private/auth/register-code.php", {
       method: "POST",
       body: formData
     });
