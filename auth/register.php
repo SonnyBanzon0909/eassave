@@ -1,4 +1,13 @@
 
+<?php
+// Start the session
+session_start();
+
+// Generate a CSRF token if it doesn't exist
+if (empty($_SESSION['csrf_token'])) {
+  $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+?>
 
 
 
@@ -10,35 +19,34 @@
 
 
 
+<!DOCTYPE html><!--  Last Published: Fri Oct 11 2024 08:14:06 GMT+0000 (Coordinated Universal Time)  -->
+<html data-wf-page="665f147b743ba95cae446d52" data-wf-site="665f147b743ba95cae446cfe">
+<head>
+  <meta charset="utf-8">
+  <title>Register</title>
+  <meta content="Register" property="og:title">
+  <meta content="Register" property="twitter:title">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
 
-  <!DOCTYPE html><!--  Last Published: Fri Oct 11 2024 08:14:06 GMT+0000 (Coordinated Universal Time)  -->
-  <html data-wf-page="665f147b743ba95cae446d52" data-wf-site="665f147b743ba95cae446cfe">
-  <head>
-    <meta charset="utf-8">
-    <title>Register</title>
-    <meta content="Register" property="og:title">
-    <meta content="Register" property="twitter:title">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
+  <base href="../" /> <!-- Use this to locate the right path -->
 
-    <base href="../" /> <!-- Use this to locate the right path -->
-
-    <link href=".../../css/normalize.css" rel="stylesheet" type="text/css">
-    <link href=".../../css/webflow.css" rel="stylesheet" type="text/css">
-    <link href=".../../css/eassave-v2.webflow.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com" rel="preconnect">
-    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
-    <script type="text/javascript">WebFont.load({  google: {    families: ["Epilogue:300,regular,500,600,700,900","Inter:100,200,300,regular,500,600,700,800,900"]  }});</script>
-    <script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script>
-    <link href=".../../images/favicon.png" rel="shortcut icon" type="image/x-icon">
-    <link href=".../../images/webclip.png" rel="apple-touch-icon">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-  </head>
-  <body>
-    <div class="page-wrapper auth-bg">
-      <div class="main-wrapper bg-gradient-black">
-        <div class="global-styles w-embed">
-          <style>
+  <link href=".../../css/normalize.css" rel="stylesheet" type="text/css">
+  <link href=".../../css/webflow.css" rel="stylesheet" type="text/css">
+  <link href=".../../css/eassave-v2.webflow.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
+  <script type="text/javascript">WebFont.load({  google: {    families: ["Epilogue:300,regular,500,600,700,900","Inter:100,200,300,regular,500,600,700,800,900"]  }});</script>
+  <script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script>
+  <link href=".../../images/favicon.png" rel="shortcut icon" type="image/x-icon">
+  <link href=".../../images/webclip.png" rel="apple-touch-icon">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+</head>
+<body>
+  <div class="page-wrapper auth-bg">
+    <div class="main-wrapper bg-gradient-black">
+      <div class="global-styles w-embed">
+        <style>
 /* Make text look crisper and more legible in all browsers */
 body {
   -webkit-font-smoothing: antialiased;
@@ -391,10 +399,14 @@ input[type="number"]::-webkit-outer-spin-button {
 
           <h1 class="heading-style-h5 bot-33">Create an Account</h1>
           <div class="login-grid">
+
             <div class="field-wrapper">
 
-              <input type="" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+              <input type="hidden" name="csrf_token" class="text-field transparent-text-field w-input" value="<?php echo $_SESSION['csrf_token']; ?>">
+            </div>
 
+
+            <div class="field-wrapper">
               <input class="text-field transparent-text-field w-input" maxlength="256" name="email" id="Email" placeholder="Email" type="email" required>
             </div>
             <div class="field-wrapper">
@@ -411,7 +423,7 @@ input[type="number"]::-webkit-outer-spin-button {
             </div>
 
             <div class="remember-wrapper">
-              <label class="w-checkbox checkbox-field">
+              <label class="w-checkbox checkbox-field" style="padding: 0px">
                 <input type="checkbox" id="terms" name="terms" required>
                 <span class="cart-check-label w-form-label">I understand and agree to the 
                   <a href="#" class="purple-span">Privacy Policy</a> and 
